@@ -29,10 +29,10 @@ public class SpawnManager : MonoBehaviour
 
     }
 
-    public Vector3 RandomSpawnPosition()
+    public Vector3 RandomSpawnPosition(float Xrange)
     {
         randomY = Random.Range(yRangeDown, yRangeUp);
-        return new Vector3(xRange, randomY, 0);
+        return new Vector3(Xrange, randomY, 0);
         
     }
 
@@ -40,11 +40,25 @@ public class SpawnManager : MonoBehaviour
 
     public void SpawnObjects()
     {
+        // derecha o izquierda , izquierda = velocity * -1, 
         if (!playerControllerScript.gameOver)
-        { 
+        {
+            int IsRight = Random.Range(0, 2);
             randomIndex = Random.Range(0, gamePrefabs.Length);
-            spawnPosition = RandomSpawnPosition();
-            Instantiate(gamePrefabs[randomIndex], spawnPosition, gamePrefabs[randomIndex].transform.rotation); 
+            if (IsRight == 1)
+            {
+               
+                spawnPosition = RandomSpawnPosition(xRange);
+                Instantiate(gamePrefabs[randomIndex], spawnPosition, gamePrefabs[randomIndex].transform.rotation);
+            }
+
+            else
+            {
+              
+                spawnPosition = RandomSpawnPosition(xRange * -1);
+                GameObject Obj = Instantiate(gamePrefabs[randomIndex], spawnPosition, gamePrefabs[randomIndex].transform.rotation);
+                Obj.GetComponent<MoveObject>().speed *= -1;
+            }
         }
     }
 }
